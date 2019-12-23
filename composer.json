@@ -48,5 +48,12 @@
         "orchestra/testbench": "~3.6 | ~4.0 ",
         "orchestra/testbench-browser-kit": "~3.6 | ~4.0",
         "ext-pdo_sqlite": "*"
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Codwelt\\Blog\\BlogServiceProvider"
+            ]
+        }
     }
 }
