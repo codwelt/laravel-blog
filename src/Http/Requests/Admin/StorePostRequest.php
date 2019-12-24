@@ -65,7 +65,7 @@ class StorePostRequest extends FormRequest
 
             ],
             //'fuentes.*.url' => 'url',
-            'fuentes.*.titulo' => [
+            'fuentes.*.titulo' => [s
                 'required_with:fuentes',
                 'string',
                 'regex:/'.self::REGEX_TITULO.'/'
@@ -97,7 +97,7 @@ class StorePostRequest extends FormRequest
                     'meta_keywords' => [
                         'required',
                         'string',
-                        'regex:/^[a-z0-9,A-Z]+$/'
+                        'regex:/^[a-z0-9,A-Z ]+$/'
                     ],
                     'hashtags' => ['required'],
                     'hashtags.*' => ['required'],
