@@ -65,7 +65,7 @@ class StorePostRequest extends FormRequest
 
             ],
             //'fuentes.*.url' => 'url',
-            'fuentes.*.titulo' => [s
+            'fuentes.*.titulo' => [
                 'required_with:fuentes',
                 'string',
                 'regex:/'.self::REGEX_TITULO.'/'
