@@ -2,9 +2,11 @@
 namespace Codwelt\Blog\Tests\Routes;
 use Codwelt\Blog\BlogServiceProvider;
 use Codwelt\Blog\Operations\Constants\ExcepcionConstants;
+use Codwelt\Blog\Operations\Models\StatePost;
 use Codwelt\Blog\Operations\SEO\SitemapBlog;
 use Codwelt\Blog\Tests\TestCaseSon;
 use DOMDocument;
+use Illuminate\Http\UploadedFile;
 use Laravelium\Sitemap\SitemapServiceProvider;
 
 
@@ -21,7 +23,7 @@ class RouteTestSon extends TestCaseSon
      * Realiza el test a la pagina de administracion principal, lista de posts
      * @test
      */
-    public function adminShowListPosts()
+    public function adminWebShowListPosts()
     {
 
         $response = $this->get(route(BlogServiceProvider::NAMESPACE_PROYECT.'.admin.posts.'));
@@ -33,7 +35,7 @@ class RouteTestSon extends TestCaseSon
      * Realiza test a la ruta de crear post
      * @test
      */
-    public function adminShowCretatePost()
+    public function adminWebShowCretatePost()
     {
 
         $response = $this->get(route(BlogServiceProvider::NAMESPACE_PROYECT.'.admin.posts.create'));
@@ -43,40 +45,36 @@ class RouteTestSon extends TestCaseSon
 
 
     /**
-     * al detalle del post Pero como no existen post Se valida que el mensaje de la excepcion sea igual
      * @test
      */
-    public function adminShowPost()
-    {
-        $response = $this->get(route(BlogServiceProvider::NAMESPACE_PROYECT. '.admin.posts.show',['postID' => 1]));
-        $response->assertResponseStatus(404);
-
-    }
-
-
-    /**
-     * @test
-     */
-    public function adminShowConfig()
+    public function adminWebShowConfig()
     {
         $response = $this->get(route(BlogServiceProvider::NAMESPACE_PROYECT.'.admin.config.index'));
         $response->assertResponseStatus(200);
     }
 
 
+
+
     /**
+     * al detalle del post Pero como no existen post Se valida que el mensaje de la excepcion sea igual
      * @test
      */
-    public function userShowIndex()
+    public function adminWebShowPost()
     {
-        $response = $this->get(route(BlogServiceProvider::NAMESPACE_PROYECT.'.index'));
-        $response->assertResponseStatus(200);
+        $response = $this->get(route(BlogServiceProvider::NAMESPACE_PROYECT. '.admin.posts.show',['postID' => 1]));
+
+        $response->assertResponseStatus(404);
+
     }
+
+
+
 
     /**
      * @test
      */
-    public function userShowDetailPost()
+    public function userWebShowDetailPost()
     {
 
         $response = $this->get(route(BlogServiceProvider::NAMESPACE_PROYECT.'.show',['slug'=> 'slug']));

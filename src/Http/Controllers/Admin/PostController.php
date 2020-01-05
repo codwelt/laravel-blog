@@ -45,12 +45,12 @@ class PostController extends Controller
         $hashtags = new Collection();
         foreach ($hashtagsArray as $hashtagArray) {
 
-            $hashtag = HashTag::porNombre($hashtagArray['nombre']);
+            $hashtag = HashTag::porNombre($hashtagArray);
 
             if (is_null($hashtag)) {
                 //Se crea el nuevo Hashtag
                 $hashtag = HashTag::create([
-                    HashTag::FILL_NOMBRE => $hashtagArray['nombre']
+                    HashTag::FILL_NOMBRE => $hashtagArray
                 ]);
             }
 
@@ -109,6 +109,7 @@ class PostController extends Controller
         switch ($request->get('state')) {
 
             case StatePost::PUBLISHED:
+
 
                 $imageStructure = new ImagePost($request->file('imagen'),$imagenName);
                 $imageStructure->save();
@@ -397,7 +398,7 @@ class PostController extends Controller
         $decodeID = Hashids::decode($postID);
 
         if (empty($decodeID)) {
-            lara_exception('Post no existe.')->debugCode(16)->style(BlogServiceProvider::NAMESPACE_PROYECT)->build(404);
+            throw new \Exception("Post No existe");
         }
 
         $post = Post::find($decodeID[0]);

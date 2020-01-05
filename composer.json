@@ -8,8 +8,6 @@
         "ext-bcmath": "*",
         "ext-gd":  "*",
         "laravel/framework": "~5.6 | ~6.0",
-        "laravel/scout": "~4.0 | ~5.0 | ~6.0 | ~7.0",
-        "yab/laravel-scout-mysql-driver": "^2.0",
         "sebastian/diff": "^3.0",
         "vinkla/hashids": "~4.0 | ~5.0 | ~6.0 | ~7.0",
         "bitpress/blade-extensions": "^1.0",

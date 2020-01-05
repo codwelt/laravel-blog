@@ -21,7 +21,6 @@ use Vinkla\Hashids\Facades\Hashids;
 class Post extends Model
 {
     use SoftDeletes;
-    use Searchable;
     protected $table = "blog_posts";
 
     const COLUMS = ['titulo','contenido','patch_miniatura','resumen','slug','meta_keywords','state'];
@@ -111,6 +110,13 @@ class Post extends Model
         //var_dump($array);
         return $array;
 
+    }
+
+
+
+    public function scopeSearch($query,$value)
+    {
+        return $query->where("titulo","LIKE","%{$value}%")->orWhere("resumen","LIKE","%{$value}%")->orWhere("contenido","LIKE","%{$value}%");
     }
 
     /**

@@ -66,8 +66,7 @@ class UpdatePostRequest extends FormRequest
                 'regex:/'.StorePostRequest::REGEX_TITULO.'/'
             ],
             'hashtags' => ['array'],
-            'hashtags.*' => ['array'],
-            'hashtags.*.nombre' => ['required_with:hashtags','alpha_num'],
+            'hashtags.*' => ['required_with:hashtags','alpha_num'],
             'state' => [
                 'regex:/^('.StatePost::PUBLISHED.'||'.StatePost::DRAFT.')$/'
             ]

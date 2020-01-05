@@ -11,6 +11,7 @@ use Codwelt\Blog\Tests\TestCaseSon;
 
 
 use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Auth;
 use Vinkla\Hashids\Facades\Hashids;
 
@@ -23,7 +24,36 @@ class PostsTestSon extends TestCaseSon
 {
 
 
+    /**
+     * @test
+     */
+    public function adminWebCrearPostBorrador()
+    {
 
+        //Autenticar usuario https://medium.com/yish/how-to-mock-authentication-user-on-unit-test-in-laravel-1441d491d82c
+        $usuario = $this->createUser();
+        $reponse = $this->actingAs($usuario)->post(route(BlogServiceProvider::NAMESPACE_PROYECT . '.admin.posts.store'), [
+            'titulo' => "Test de POST",
+            'slug' => "test-de-post"
+        ])->assertRedirectedTo(route(BlogServiceProvider::NAMESPACE_PROYECT . '.admin.posts.'));
+
+    }
+
+    /**
+     * @test
+     */
+    public function adminWebCrearPostPublishedFail()
+    {
+
+        //Autenticar usuario https://medium.com/yish/how-to-mock-authentication-user-on-unit-test-in-laravel-1441d491d82c
+        $usuario = $this->createUser();
+        $reponse = $this->actingAs($usuario)->post(route(BlogServiceProvider::NAMESPACE_PROYECT . '.admin.posts.store'), [
+            'titulo' => "Test de POST",
+            'slug' => "test-de-post",
+            "state" => StatePost::PUBLISHED
+        ])->assertResponseStatus(302);
+
+    }
 
     /**
      * @test
@@ -40,42 +70,39 @@ class PostsTestSon extends TestCaseSon
 
         Auth::login($user);
         //Se obtiene la imagen a subir y se crea un archivo de subir
-        $imagen = new UploadedFile($pathImage, 'large-avatar.jpg', 'image/png', null, null, true);
+        $imageUpload = new UploadedFile($pathImage, 'large-avatar.jpg', 'image/png', null, true);
 
-        //Se hace el llamado a la ruta para crear post
-        $response = $this->call('POST', route(BlogServiceProvider::NAMESPACE_PROYECT . '.admin.posts.store'), [
+       // $imageUpload = UploadedFile::fake();
+
+
+        $dataParameter = [
             'titulo' => 'titulo de prueba',
             'slug' => 'tutlo-de-prueba',
             'hashtags' => [
-                [
-                    'nombre' => 'prueba'
-                ]
+                'prueba'
             ],
             'state' => StatePost::PUBLISHED,
             'resumen' => 'resument de prueba',
-            'meta_keywords' => 'metaeprueba',
+            'meta_keywords' => 'metaeprueba,,',
             'contenido' => 'contenido de prueba'
-
-        ], [], [
-            'imagen' => $imagen
-        ]);
+        ];
 
 
+        $this->call('POST',route(BlogServiceProvider::NAMESPACE_PROYECT . '.admin.posts.store'),$dataParameter,[],['imagen' => $imageUpload]);
+        //Se hace el llamado a la ruta para crear post
 
 
         $response = $this->assertResponseStatus(302)->followRedirects($this);
 
         $encodeID = Hashids::encode(1);
 
-        $response = $this->get(route(BlogServiceProvider::NAMESPACE_PROYECT . '.admin.posts.show',['postID' => $encodeID]));
+        $response = $this->get(route(BlogServiceProvider::NAMESPACE_PROYECT . '.admin.posts.show', ['postID' => $encodeID]));
      //   dd($response->response);
         $response->assertResponseStatus(200);
 
-        $response = $this->get(route(BlogServiceProvider::NAMESPACE_PROYECT.'.index'));
+        $response = $this->get(route(BlogServiceProvider::NAMESPACE_PROYECT . '.index'));
 
         $response->assertResponseStatus(200);
-
-
 
 
     }
@@ -86,7 +113,7 @@ class PostsTestSon extends TestCaseSon
     public function getPostAPIJson()
     {
 
-        $response = $this->get(route(BlogServiceProvider::NAMESPACE_PROYECT. '.api.user.posts.',['output' => 'ramdom']));
+        $response = $this->get(route(BlogServiceProvider::NAMESPACE_PROYECT . '.api.user.posts.', ['output' => 'ramdom']));
         //dd($response);
         $response->assertResponseStatus(200);
     }

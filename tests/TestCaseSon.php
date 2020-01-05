@@ -35,8 +35,6 @@ class TestCaseSon extends TestFather
             HashidsServiceProvider::class,
             SEOToolsServiceProvider::class,
             SitemapServiceProvider::class,
-            MySQLScoutServiceProvider::class,
-            ScoutServiceProvider::class,
             ImageServiceProvider::class
 
 

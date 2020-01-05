@@ -48,11 +48,9 @@ class InstallCommand extends Command
 
         $this->publishedFiles();
 
-        $this->organizateConfigScout($filesystem);
-
         $this->organizateConfigHashids($filesystem);
 
-       // $this->organizateMigrations($filesystem);
+        $this->organizateMigrations($filesystem);
 
         $this->info("Ejecutando Seeds de configuracion.");
 
@@ -71,27 +69,7 @@ class InstallCommand extends Command
         }
     }
 
-    /**
-     * Compruaba si la configuracion scout del proyecto es la misma personalizada ya que puede pasar de que el paquete de scout reemplace al personalizado asi que
-     * se compara los sha1 del contenido de los dos si son diferentes se reamplaza todo el contenido del archivo por el persnozalido por le blog
-     * @param Filesystem $filesystem
-     */
-    public function organizateConfigScout(Filesystem $filesystem)
-    {
 
-
-        $this->info("Comprobando Configuracion de busqueda.");
-
-        $patchScoutConfig = base_path('config/scout.php');
-        $patchMyScoutConfig = path_codwelt_blog('Configs/scout.php');
-
-        if(sha1_file($patchScoutConfig) != sha1_file($patchMyScoutConfig)){
-            $this->info("Reemplazando configuracion de busqueda por defecto a personalizada.");
-            $myScoutConfig = $filesystem->get($patchMyScoutConfig);
-            $filesystem->put(base_path('config/scout.php'),$myScoutConfig);
-        }
-
-    }
 
     /**
      * Comprueba que la configuracion del hashids sea la misma de la personalizada si no es asi se reemplaza el archivo de configuracion
@@ -112,14 +90,14 @@ class InstallCommand extends Command
     }
 
     /**
-     * @deprecated Ya no se haran las migraciones por el comando se tiene que hacer in migrate --path
+     *
      * @param Filesystem $filesystem
      */
     public function organizateMigrations(Filesystem $filesystem)
     {
 
         //Validar si ya todas las migraciones estan hechas
-        $pathMigrations = path_blog('Database/Migrations');
+        $pathMigrations = path_codwelt_blog('Database/Migrations');
 
         $filesMigration = $filesystem->files($pathMigrations);
 
@@ -142,7 +120,7 @@ class InstallCommand extends Command
                 if($confirm){
                     //hacer un rollback
                     $this->info("Eliminando migraciones ya creadas");
-                    $this->call('migrate:rollback',['--path' => path_blog('Database/Migrations/')]);
+                    $this->call('migrate:rollback',['--path' => path_codwelt_blog('Database/Migrations/')]);
                 }else{
                     $this->error("No se realizaran migraciones necesarias para la configuracion.");
                 }
@@ -153,7 +131,7 @@ class InstallCommand extends Command
 
         $this->info("Realizando migraciones de configuracion.");
 
-        $this->call('migrate', ['--path' => path_blog('Database/Migrations/')]);
+        $this->call('migrate', ['--path' => path_codwelt_blog('Database/Migrations/')]);
     }
 
 

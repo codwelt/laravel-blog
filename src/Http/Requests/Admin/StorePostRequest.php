@@ -71,8 +71,7 @@ class StorePostRequest extends FormRequest
                 'regex:/'.self::REGEX_TITULO.'/'
             ],
             'hashtags' => ['array'],
-            'hashtags.*' => ['array'],
-            'hashtags.*.nombre' => ['alpha_num'],
+            'hashtags.*' => ['alpha_num','required_with:hashtags','alpha_num'],
             'state' => [
                 'regex:/^('.StatePost::PUBLISHED.'||'.StatePost::DRAFT.')$/'
             ]
@@ -100,10 +99,9 @@ class StorePostRequest extends FormRequest
                         'regex:/^[a-z0-9,A-Z ]+$/'
                     ],
                     'hashtags' => ['required'],
-                    'hashtags.*' => ['required'],
-                    'hashtags.*.nombre' => ['required'],
+                    'hashtags.*' => ['alpha_num','required_with:hashtags','alpha_num']
                 ];
-                $reglas = array_merge($reglas, $masReglas);
+                $reglas = array_merge_recursive($reglas, $masReglas);
                 break;
             default:
                 break;

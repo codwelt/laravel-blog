@@ -14,9 +14,11 @@
         <!--<testsuite name="BlogCodwelt General">
             <directory>tests</directory>
         </testsuite>-->
-        <testsuite name="Blog">
-            <file>tests/Posts/PostsTest.php</file>
-            <file>tests/Routes/RouteTest.php</file>
+        <testsuite name="Routes">
+            <directory suffix=".php">tests/Routes</directory>
+        </testsuite>
+        <testsuite name="Posts">
+            <directory suffix=".php">tests/Posts</directory>
         </testsuite>
 
 
