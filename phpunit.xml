@@ -10,6 +10,9 @@
          processIsolation="false"
          stopOnFailure="false"
 >
+    <logging>
+        <log type="testdox-text" target="php://stdout"/>
+    </logging>
     <testsuites>
         <!--<testsuite name="BlogCodwelt General">
             <directory>tests</directory>

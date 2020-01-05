@@ -29,10 +29,12 @@ class PostController extends Controller
     {
 
 
+
         $npagination = Config::paginationHome();
 
         //Busqueda Normal por titulo
         if ($request->has(self::KEY_REQUEST_SEARCH)) {
+
             $postPagination = Post::search($request->get(self::KEY_REQUEST_SEARCH))->where('state',StatePost::PUBLISHED)->paginate($npagination);
         } else {
             //Busqueda por tags

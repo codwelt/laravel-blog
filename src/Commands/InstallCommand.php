@@ -18,7 +18,7 @@ use SebastianBergmann\Diff\Differ;
 class InstallCommand extends Command
 {
 
-    protected $signature = BlogServiceProvider::NAMESPACE_PROYECT.":install";
+    protected $signature = BlogServiceProvider::NAMESPACE_PROYECT.":install {--test=  : por defecto es false se se indica en true no se ejecutan migraciones}";
 
 
     protected $description = "Hace la instanacion y configura los archivos seeds necesarios para el funcionamiento";
@@ -32,6 +32,8 @@ class InstallCommand extends Command
 
     public function handle(Filesystem $filesystem)
     {
+
+
 
 
         /*$this->info("Publicando Vistas.");
@@ -96,12 +98,19 @@ class InstallCommand extends Command
     public function organizateMigrations(Filesystem $filesystem)
     {
 
+
+        $notest = (bool)$this->option("test");
+
+
+
         //Validar si ya todas las migraciones estan hechas
         $pathMigrations = path_codwelt_blog('Database/Migrations');
 
         $filesMigration = $filesystem->files($pathMigrations);
 
         foreach ($filesMigration as $fileMigration){
+
+
 
             $migrationName = explode('.php',$fileMigration->getFilename())[0];
             $register = DB::table('migrations')->where('migration',$migrationName)->first();
@@ -113,21 +122,27 @@ class InstallCommand extends Command
                 array_push($migracionesExistentes,$register);
             }
 
+
             if(count($migracionesExistentes) > 0){
 
-                $confirm = $this->confirm("Ya existen migraciones, sera necesario eliminar y volver a crear las tablas asi que si desea guardar una configuracion hagalo ahora y confirme para continuar!!");
+                if($notest){
+                    $confirm = $this->confirm("Ya existen migraciones, sera necesario eliminar y volver a crear las tablas asi que si desea guardar una configuracion hagalo ahora y confirme para continuar!!");
 
-                if($confirm){
-                    //hacer un rollback
-                    $this->info("Eliminando migraciones ya creadas");
-                    $this->call('migrate:rollback',['--path' => path_codwelt_blog('Database/Migrations/')]);
-                }else{
-                    $this->error("No se realizaran migraciones necesarias para la configuracion.");
+                    if($confirm){
+                        //hacer un rollback
+                        $this->info("Eliminando migraciones ya creadas");
+                        $this->call('migrate:rollback',['--path' => path_codwelt_blog('Database/Migrations/')]);
+                    }else{
+                        $this->error("No se realizaran migraciones necesarias para la configuracion.");
+                    }
                 }
+
 
             }
 
+
         }
+
 
         $this->info("Realizando migraciones de configuracion.");
 
