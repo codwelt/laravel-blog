@@ -16,7 +16,7 @@ class HashTagResource extends JsonResource
     public function toArray($request)
     {
         return [
-            'nombre' => $this->nombre,
+            'nombre' =>ucfirst($this->nombre),
             'nPosts' => $this->posts()->count()
         ];
     }

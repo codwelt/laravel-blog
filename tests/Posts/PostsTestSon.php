@@ -101,7 +101,7 @@ class PostsTestSon extends TestCaseSon
 
         $response = $response->get(route(BlogServiceProvider::NAMESPACE_PROYECT . '.index'));
 
-       
+
         $response->assertResponseStatus(200);
 
     }
