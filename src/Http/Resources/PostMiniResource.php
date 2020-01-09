@@ -26,6 +26,7 @@ class PostMiniResource extends JsonResource
             ],
             'autor' => new CreatorResource($this->creador),
             'fecha_publicacion' => $this->created_at->diffForHumans(),
+            "resumen" => $this->resumen,
             'url' => $this->getURL(),
             'slug' => $this->slug,
             'urlRelated' => $this->getUrlRelated(),
