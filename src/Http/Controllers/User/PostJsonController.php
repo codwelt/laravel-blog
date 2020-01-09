@@ -41,9 +41,7 @@ class PostJsonController extends Controller
         }
 
 
-
-
-        $postsCollection = PostResource::collection($postPagination);
+        $postsCollection = PostMiniResource::collection($postPagination);
         $posts = $postsCollection->response()->getData(true);
         return response()->json($posts);
 

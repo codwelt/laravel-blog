@@ -43,7 +43,8 @@ class PostResource extends JsonResource
             'hashtags' => HashTagResource::collection($this->hashtags),
             'fuentes' => FuenteResource::collection($this->fuentes),
             'urlRelated' => $this->getUrlRelated(),
-            'estado' => $this->state
+            'estado' => $this->state,
+            "comentarios_total" => $this->comments()->count()
         ];
 
 

@@ -24,9 +24,12 @@ class PostMiniResource extends JsonResource
             'files' => [
                 'imgThumbnail' =>  $this->getUrlMiniImage()
             ],
+            'autor' => new CreatorResource($this->creador),
             'fecha_publicacion' => $this->created_at->diffForHumans(),
             'url' => $this->getURL(),
-            'urlRelated' => $this->getUrlRelated()
+            'urlRelated' => $this->getUrlRelated(),
+            'hashtags' => HashTagResource::collection($this->hashtags),
+            "comentarios_total" => $this->comments()->count()
         ];
 
         return $data;
