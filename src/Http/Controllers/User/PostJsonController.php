@@ -2,6 +2,7 @@
 
 
 namespace Codwelt\Blog\Http\Controllers\User;
+use Codwelt\Blog\BlogServiceProvider;
 use Codwelt\Blog\Http\Controllers\Controller;
 use Codwelt\Blog\Http\Resources\PostMiniResource;
 use Codwelt\Blog\Http\Resources\PostResource;
@@ -98,7 +99,19 @@ class PostJsonController extends Controller
 
         }
         return response()->json(['data' => []]);
+    }
 
+    public function show(Request $request,$slug)
+    {
+        $post = Post::where('slug',$slug)->where('state', StatePost::PUBLISHED)->first();
+
+        if(is_null($post)){
+            return response()->json([],404);
+        }
+
+        $postResource = (new PostResource($post))->response()->getData(true);
+
+        return response()->json($postResource);
 
     }
 }

@@ -90,6 +90,10 @@ Route::group(['prefix' => '/blog', 'as' => \Codwelt\Blog\BlogServiceProvider::NA
                    'uses' => 'Codwelt\Blog\Http\Controllers\User\PostJsonController@index'
                ]);
 
+                Route::get('/{slug}',[
+                    'uses' => 'Codwelt\Blog\Http\Controllers\User\PostJsonController@show'
+                ]);
+
                Route::get('/related/{postID}',[
                   'uses' => 'Codwelt\Blog\Http\Controllers\User\PostJsonController@related',
                   'as' => 'related'
