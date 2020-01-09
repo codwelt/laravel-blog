@@ -22,10 +22,7 @@ class PostMiniResource extends JsonResource
         $data = [
             'titulo' => $this->titulo,
             'files' => [
-                [
-                    'key' => 'imgThumbnail',
-                    'src' => $this->getUrlMiniImage()
-                ]
+                'imgThumbnail' =>  $this->getUrlMiniImage()
             ],
             'fecha_publicacion' => $this->created_at->diffForHumans(),
             'url' => $this->getURL(),

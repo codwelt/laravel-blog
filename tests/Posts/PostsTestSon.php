@@ -87,7 +87,7 @@ class PostsTestSon extends TestCaseSon
         ];
 
 
-        $this->call('POST',route(BlogServiceProvider::NAMESPACE_PROYECT . '.admin.posts.store'),$dataParameter,[],['imagen' => $imageUpload]);
+        $response = $this->call('POST',route(BlogServiceProvider::NAMESPACE_PROYECT . '.admin.posts.store'),$dataParameter,[],['imagen' => $imageUpload]);
         //Se hace el llamado a la ruta para crear post
 
 
@@ -95,12 +95,13 @@ class PostsTestSon extends TestCaseSon
 
         $encodeID = Hashids::encode(1);
 
-        $response = $this->get(route(BlogServiceProvider::NAMESPACE_PROYECT . '.admin.posts.show', ['postID' => $encodeID]));
-     //   dd($response->response);
+        $response = $response->get(route(BlogServiceProvider::NAMESPACE_PROYECT . '.admin.posts.show', ['postID' => $encodeID]));
+
         $response->assertResponseStatus(200);
 
-        $response = $this->get(route(BlogServiceProvider::NAMESPACE_PROYECT . '.index'));
+        $response = $response->get(route(BlogServiceProvider::NAMESPACE_PROYECT . '.index'));
 
+       
         $response->assertResponseStatus(200);
 
     }

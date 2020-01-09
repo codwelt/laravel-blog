@@ -130,6 +130,8 @@ class PostController extends Controller
         ///
         $posts = $postsCollection->response()->getData(true);
 
+
+
         //debugMe($posts);
 
         return view(BlogServiceProvider::NAMESPACE_PROYECT.'::User.lista_posts',[

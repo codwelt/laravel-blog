@@ -32,14 +32,8 @@ class PostResource extends JsonResource
             'contenido' => $this->contenido,
             'resumen' => $this->resumen,
             'files' => [
-                [
-                    'key' => 'imgThumbnail',
-                    'src' => $this->getUrlMiniImage()
-                ],
-                [
-                    'key' => 'imgHeader',
-                    'src' => $this->getUrlHeaderImage()
-                ]
+                'imgThumbnail' => $this->getUrlMiniImage(),
+                'imgHeader' => $this->getUrlHeaderImage()
             ],
             'fecha_publicacion' => $this->created_at->diffForHumans(),
             'autor' => new CreatorResource($this->creador),
