@@ -117,7 +117,8 @@ class RouteTestSon extends TestCaseSon
      */
     public function apiShowHashtags()
     {
-        $response = $this->get(route(BlogServiceProvider::NAMESPACE_PROYECT. '.api.user.hashtags.index'));
+        $response = $this->get(route(BlogServiceProvider::NAMESPACE_PROYECT. '.api.user.hashtags.index'),["Accept" => "application/json"]);
+
         $response->assertResponseStatus(200);
     }
 

@@ -27,6 +27,7 @@ class PostResource extends JsonResource
     public function toArray($request)
     {
         Carbon::setLocale('es');
+        $managetBlog = app('CodweltBlogManager');
         $data = [
             'id' => Hashids::encode($this->id),
             'titulo' => $this->titulo,
@@ -39,7 +40,7 @@ class PostResource extends JsonResource
             'fecha_publicacion' => $this->created_at->format("Y-m-d H:m:s"),
             'autor' => new CreatorResource($this->creador),
             'meta_keywords' => $this->meta_keywords,
-            'url' => $this->getURL(),
+            'url' => $managetBlog->getUrlPost($this->slug),
             'slug' => $this->slug,
             'hashtags' => HashTagResource::collection($this->hashtags),
             'fuentes' => FuenteResource::collection($this->fuentes),
@@ -55,34 +56,29 @@ class PostResource extends JsonResource
 
    public function with($request)
     {
+
+        $managetBlog = app('CodweltBlogManager');
         $myWith = [
             'meta_tags' => [
                 "description" => $this->resumen,
                 'keyworks' => $this->getMetaKeyWords(),
                 'robots' => Config::getRobotsArray()['post'],
-                'canonical' => $this->getUrl(),
+                'canonical' => $managetBlog->getUrlPostMetaTag($this->slug),
                 "article:author" => $this->creador->getNameModel(),
                 "article:published_time" => $this->created_at,
                 'og:title' => $this->titulo,
                 'og:description' => $this->resumen,
-                'og:url' => $this->getUrl(),
+                'og:url' =>  $managetBlog->getUrlPostMetaTag($this->slug),
                 'og:type' => 'article',
                 'og:locale' => app()->getLocale(),
-                'og:site_name' => $this->
-                'og:updated_time' => $this->created_at,
-                'og:site_name' => config('codwelt_blog.site'),
-                'twitter:title' => $this->titulo,
-                'description' => $this->resumen,
-                'og:description' => $this->resumen,
-                'twitter:description' => $this->resumen,
-                'og:image' => url('storage/'.$this->patch_miniatura),
-                'twitter:url' => 'http://url',
-                'og:url' => 'http://url',
-
-
-
-
-
+                'og:site_name' =>  $managetBlog->getDomainMetaTag(),
+                'og:image' => $this->getUrlMiniImage(),
+                //twitter
+                'twitter:title' =>$this->titulo,
+                'twitter:description' =>  $this->resumen,
+                'twitter:url' => $managetBlog->getUrlPostMetaTag($this->slug),
+                'twitter:site' => !empty(config('seotools.twitter.defaults.site'))  ? config('seotools.twitter.defaults.site') : '@codwelt',
+                'twitter:images0' => $this->getUrlMiniImage()
             ]
         ];
 

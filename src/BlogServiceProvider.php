@@ -4,7 +4,9 @@ namespace Codwelt\Blog;
 use Codwelt\Blog\Blade\BlogExtension;
 use Codwelt\Blog\Commands\InstallCommand;
 use Codwelt\Blog\Commands\UpdateCommand;
+use Codwelt\Blog\Http\Middlewares\APIMiddleware;
 use Codwelt\Blog\Http\Middlewares\RobotsHTTPMiddleware;
+use Codwelt\Blog\Managers\CodweltBlogManager;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Routing\Router;
 use Illuminate\Support\ServiceProvider;
@@ -22,9 +24,9 @@ class BlogServiceProvider extends ServiceProvider
 
     const TAGS_PUBLISHED = [
       'views' =>   self::NAMESPACE_PROYECT.'_views',
-      'config_search' => self::NAMESPACE_PROYECT.'_config_search',
       'seeds' => self::NAMESPACE_PROYECT.'_seeds',
       'config_hashids' => self::NAMESPACE_PROYECT.'_config_hashids',
+      'config_seotools' => self::NAMESPACE_PROYECT.'_config_seotools',
       'config_'.self::NAMESPACE_PROYECT => self::NAMESPACE_PROYECT.'_config_core'
     ];
 
@@ -45,6 +47,7 @@ class BlogServiceProvider extends ServiceProvider
         $this->registerCommands();
 
         $router->aliasMiddleware(self::NAMESPACE_PROYECT.'_robotsHTTP', RobotsHTTPMiddleware::class);
+        $router->aliasMiddleware(self::NAMESPACE_PROYECT.'_api', APIMiddleware::class);
 
 
 
@@ -59,7 +62,11 @@ class BlogServiceProvider extends ServiceProvider
         //Registro de metodos para blade
         blade_extension(BlogExtension::class);
 
-           }
+        //Se registra el singleton
+        $this->app->singleton('CodweltBlogManager',function(){
+            return new CodweltBlogManager();
+        });
+    }
 
     /**
      * Carga los helpers que se hallan creado
@@ -78,15 +85,12 @@ class BlogServiceProvider extends ServiceProvider
             self::TAGS_PUBLISHED['views'] => [
                 __DIR__.'/Views' => resource_path('views/vendor/'.self::NAMESPACE_PROYECT),
             ],
-            self::TAGS_PUBLISHED['config_search'] => [
-                __DIR__.'/Configs/scout.php' => config_path('scout.php') //Configuracion de busqueda
-            ],
             self::TAGS_PUBLISHED['config_hashids'] => [
                 __DIR__ . '/Configs/hashids.php' => config_path('hashids.php')
             ],
-            /*self::TAGS_PUBLISHED['seeds'] => [ //Ya no necesario se ajecuta manualmente el seed en el comando de instalacion
-                __DIR__ . '/Database/Seeds' => database_path('seeds')
-            ],*/
+            self::TAGS_PUBLISHED['config_seotools'] => [
+                __DIR__ . '/Configs/seotools.php.php' => config_path('seotools.php')
+            ],
             self::TAGS_PUBLISHED['config_'.self::NAMESPACE_PROYECT] => [
                 __DIR__ . '/Configs/'.self::NAMESPACE_PROYECT . '.php' => config_path(self::NAMESPACE_PROYECT.'.php')
             ]

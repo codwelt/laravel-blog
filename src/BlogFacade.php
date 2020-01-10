@@ -15,7 +15,7 @@ class BlogFacade extends Facade
      */
     protected static function getFacadeAccessor()
     {
-        return 'CodweltBlog';
+        return 'CodweltBlogManager';
     }
 
 }

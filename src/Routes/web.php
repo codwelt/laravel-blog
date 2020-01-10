@@ -78,7 +78,7 @@ Route::group(['prefix' => '/blog', 'as' => \Codwelt\Blog\BlogServiceProvider::NA
 
     });
 
-    Route::group(['prefix' => 'api', 'as' => 'api.'],function(){
+    Route::group(['prefix' => 'api', 'as' => 'api.','middleware' => [\Codwelt\Blog\BlogServiceProvider::NAMESPACE_PROYECT.'_api']],function(){
 
         //Usuario
         Route::group(['prefix' => 'user', 'as' => 'user.','middleware' => config(\Codwelt\Blog\BlogServiceProvider::NAMESPACE_PROYECT.'.routes.middlewares.api.user')],function(){
