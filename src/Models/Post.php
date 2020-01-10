@@ -67,9 +67,10 @@ class Post extends Model
      * Devuelve la url utilizada para ver el detalle del post
      * @return string
      */
-    public function getURL()
+    public function getURL($isApi = false)
     {
-        return route(BlogServiceProvider::NAMESPACE_PROYECT.'.show',['slug' => $this->slug]);
+        $urlConfig = !$isApi ? config('codwelt_blog.web.posts') : config('codwelt_blog.web.api');
+        return  $urlConfig ."/" .$this->slug;
     }
 
 
@@ -172,5 +173,15 @@ class Post extends Model
         return route(BlogServiceProvider::NAMESPACE_PROYECT.'.api.user.posts.related',['postID' => $this->getEncryptedId()]);
     }
 
+
+    ///Logica para SEO
+    ///
+    ///
+
+    public function getMetaKeyWords()
+    {
+        $tagsArray = $this->hashtags->pluck('nombre')->toArray();
+        return array_merge($tagsArray,explode(',',$this->meta_keywords));
+    }
 
 }

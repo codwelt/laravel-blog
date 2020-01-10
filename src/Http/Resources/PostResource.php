@@ -4,6 +4,7 @@
 namespace Codwelt\Blog\Http\Resources;
 use Carbon\Carbon;
 use Codwelt\Blog\BlogServiceProvider;
+use Codwelt\Blog\Models\Config;
 use Codwelt\Blog\Operations\Constants\Path;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
@@ -51,15 +52,25 @@ class PostResource extends JsonResource
         return $data;
     }
 
-   /*
-   Informacion en el meta
+
    public function with($request)
     {
         $myWith = [
-            'meta' => [
-                'author' => $this->creador->getNameModel(),
-                'title' => $this->titulo,
+            'meta_tags' => [
+                "description" => $this->resumen,
+                'keyworks' => $this->getMetaKeyWords(),
+                'robots' => Config::getRobotsArray()['post'],
+                'canonical' => $this->getUrl(),
+                "article:author" => $this->creador->getNameModel(),
+                "article:published_time" => $this->created_at,
                 'og:title' => $this->titulo,
+                'og:description' => $this->resumen,
+                'og:url' => $this->getUrl(),
+                'og:type' => 'article',
+                'og:locale' => app()->getLocale(),
+                'og:site_name' => $this->
+                'og:updated_time' => $this->created_at,
+                'og:site_name' => config('codwelt_blog.site'),
                 'twitter:title' => $this->titulo,
                 'description' => $this->resumen,
                 'og:description' => $this->resumen,
@@ -67,15 +78,15 @@ class PostResource extends JsonResource
                 'og:image' => url('storage/'.$this->patch_miniatura),
                 'twitter:url' => 'http://url',
                 'og:url' => 'http://url',
-                'keyworks' => 'tagy, tag2,tag,3',
-                'robots' => 'rbosts del post',
-                'canonical' => 'http://caninocal'
+
+
+
 
 
             ]
         ];
 
         return $myWith;
-    }*/
+    }
 
 }

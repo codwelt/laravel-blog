@@ -110,8 +110,9 @@ class PostsTestSon extends TestCaseSon
 
         $this->assertStringContainsString($dataParameter["titulo"],$response->response->content());
 
-        $response = $response->get(route(BlogServiceProvider::NAMESPACE_PROYECT . '.api.user.posts.index', ['slug' => $dataParameter["slug"]]));
+        $response = $response->get(route(BlogServiceProvider::NAMESPACE_PROYECT . '.api.user.posts.show', ['slug' => $dataParameter["slug"]]));
 
+        dd($response->response->content());
         $this->assertStringContainsString($dataParameter["titulo"],$response->response->content());
 
 
