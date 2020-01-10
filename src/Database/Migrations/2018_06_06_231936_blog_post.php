@@ -25,7 +25,7 @@ class BlogPost extends Migration
             $table->string('titulo');
             $table->longText('contenido');
             $table->string('patch_miniatura');
-            $table->longText("resumen");
+            $table->string("resumen",120);
             $table->string('user_id')->index();
             $table->string('slug')->unique();
             $table->text('meta_keywords')->nullable();

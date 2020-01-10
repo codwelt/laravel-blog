@@ -40,6 +40,7 @@ class RouteTestSon extends TestCaseSon
 
         $response = $this->get(route(BlogServiceProvider::NAMESPACE_PROYECT.'.admin.posts.create'));
 
+
         $response->assertResponseStatus(200);
     }
 

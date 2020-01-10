@@ -2,6 +2,7 @@
 
 
 namespace Codwelt\Blog\Http\Controllers\Admin;
+
 use Codwelt\Blog\BlogServiceProvider;
 use Codwelt\Blog\Http\Controllers\Controller;
 use Codwelt\Blog\Http\Requests\Admin\StorePostRequest;
@@ -86,13 +87,12 @@ class PostController extends Controller
     }
 
 
-
-    private function checkFileInStorage(string $fileName):bool
+    private function checkFileInStorage(string $fileName): bool
     {
 
-        $file1 = Storage::disk('public')->exists(BlogServiceProvider::NAMESPACE_PROYECT .'/'.Path::PUBLIC_STORAGE_POST_IMAGES_HEADER . '/'.$fileName);
+        $file1 = Storage::disk('public')->exists(BlogServiceProvider::NAMESPACE_PROYECT . '/' . Path::PUBLIC_STORAGE_POST_IMAGES_HEADER . '/' . $fileName);
 
-        $file2 = Storage::disk('public')->exists(BlogServiceProvider::NAMESPACE_PROYECT .'/'. Path::PUBLIC_STORAGE_POST_IMAGES_THUMBNAIL . '/'.$fileName);
+        $file2 = Storage::disk('public')->exists(BlogServiceProvider::NAMESPACE_PROYECT . '/' . Path::PUBLIC_STORAGE_POST_IMAGES_THUMBNAIL . '/' . $fileName);
 
         return $file1 && $file2;
     }
@@ -104,68 +104,46 @@ class PostController extends Controller
     public function store(StorePostRequest $request)
     {
 
-        $imagenName = Str::random(10);
 
-        switch ($request->get('state')) {
+        $imagenName = "";
+        $contenido = "";
+        $resumen = "";
+        $meta_keywords = "";
+        $statePost = $request->get('state');
+        $hashtags = [];
+        $fuentes = [];
 
-            case StatePost::PUBLISHED:
-
-
-                $imageStructure = new ImagePost($request->file('imagen'),$imagenName);
-                $imageStructure->save();
-                $imagenName = $imageStructure->getNameInfStorage();
-
-                $contenido = $request->get('contenido');
-                $resumen = $request->get('resumen');
-                $meta_keywords = $request->get('meta_keywords');
-                $statePost = StatePost::PUBLISHED;
-                $hashtags = $request->get('hashtags');
-                $fuentes = is_null($request->get('fuentes')) ? [] : $request->get('fuentes');
-
-                break;
-
-            default:
-                //Borrador
-
-
-                if ($request->has('imagen')) {
-                    $requestFile = $request->file('imagen');
-
-                    $imageStructure = new ImagePost($requestFile,$imagenName);
-                    $imageStructure->save();
-                    $imagenName = $imageStructure->getNameInfStorage();
-                }
-
-                $contenido = '';
-                $resumen = '';
-                $meta_keywords = '';
-                $statePost = StatePost::DRAFT;
-                $hashtags = [];
-                $fuentes = [];
-
-                if (!is_null($request->get('contenido'))) {
-                    $contenido = $request->get('contenido');
-                }
-
-                if (!is_null($request->get('resumen'))) {
-                    $resumen = $request->get('resumen');
-                }
-
-                if (!is_null($request->get('meta_keywords'))) {
-                    $meta_keywords = $request->get('meta_keywords');
-                }
-
-                if (!is_null($request->get('hashtags'))) {
-                    $hashtags = $request->get('hashtags');
-                }
-
-                if (!is_null($request->get('fuentes'))) {
-                    $fuentes = $request->get('fuentes');
-                }
-
-                break;
-
+        if (!empty($request->file("imagen"))) {
+            $imagenName = Str::random(10);
+            $imageStructure = new ImagePost($request->file('imagen'), $imagenName);
+            $imageStructure->save();
+            $imagenName = $imageStructure->getNameInfStorage();
         }
+
+        if (!empty($request->get("contenido"))) {
+            $contenido = $request->get('contenido');
+        }
+
+        if (!empty($request->get("resumen"))) {
+            $resumen = $request->get('resumen');
+        } else {
+            //quitar codigo html del contenido
+            $resumen = strip_tags(substr($contenido, 0, 120));
+        }
+
+        if (!empty($request->get("meta_keywords"))) {
+            $meta_keywords = $request->get('meta_keywords');
+        }
+
+
+        if (!empty($request->get("hashtags"))) {
+            $hashtags = $request->get('hashtags');
+        }
+
+        if (!empty($request->get("fuentes"))) {
+            $fuentes = $request->get('fuentes');
+        }
+
 
         //Se espera que el usuario autenticado sea creados de posts
         $post = Auth::user()->posts()->create([
@@ -195,9 +173,8 @@ class PostController extends Controller
         }
 
 
-
-
         return redirect()->route(BlogServiceProvider::NAMESPACE_PROYECT . '.admin.posts.');
+
 
     }
 
@@ -217,16 +194,12 @@ class PostController extends Controller
         }
 
 
-
         $postResource = (new PostResource($post))->response()->getData(true);
 
 
         return view(BlogServiceProvider::NAMESPACE_PROYECT . '::Admin.Posts.editar', ['post' => $postResource['data']]);
 
     }
-
-
-
 
 
     /***
@@ -243,7 +216,7 @@ class PostController extends Controller
 
         $post = Post::find($decodeID[0]);
 
-        if(is_null($post)){
+        if (is_null($post)) {
             return redirect()->route('blog.admin.posts.');
         }
 
@@ -251,9 +224,9 @@ class PostController extends Controller
         $informacionActualizar = $request->only(Post::COLUMS);
 
         //Se genera un nombre de imagen por si se necesita
-        $imagenName = helperman_random_string(10);
+        $imagenName = Str::random(10);
 
-        switch ($request->get('state')){
+        switch ($request->get('state')) {
             case StatePost::PUBLISHED:
 
                 $statePost = StatePost::PUBLISHED;
@@ -263,22 +236,22 @@ class PostController extends Controller
 
                 //Obtengo lo hastags para ver si toca actualizar o añadir
 
-                if($request->has('hashtags')){
+                if ($request->has('hashtags')) {
                     $hashtags = $request->get('hashtags');
-                }else{
+                } else {
                     //Comrpobar que tenga almenos un hashtag
-                    if($post->hashtags->count() < 1){
+                    if ($post->hashtags->count() < 1) {
                         return redirect()->back()->withErrors('Hace falta asingar almenos un hashtag al post')->withInput();
                     }
 
                 }
 
-                if($request->has('fuentes')){
+                if ($request->has('fuentes')) {
                     $fuentes = $request->get('fuentes');
                 }
 
                 //COmporbar que tenga una imagen que exista
-                if($request->has('imagen')){
+                if ($request->has('imagen')) {
 
                     //Se sube la nueva imagen
                     $imagenStructure = new ImagePost($request->file('imagen'), $imagenName);
@@ -293,23 +266,23 @@ class PostController extends Controller
                     $informacionActualizar['patch_miniatura'] = $imagenName;
 
 
-                }else{
+                } else {
 
                     $imagenName = $post->patch_miniatura;
-                    if($this->checkFileInStorage($imagenName)){
+                    if ($this->checkFileInStorage($imagenName)) {
                         unset($informacionActualizar['patch_miniatura']);
-                    }else{
+                    } else {
                         return redirect()->back()->withErrors('Hace falta asignarle una imagen al post.')->withInput();
                     }
                 }
 
                 break;
             default:
-                if($request->has('imagen')){
+                if ($request->has('imagen')) {
                     //Se sube la nueva imagen
 
 
-                    $imagenStructure = new ImagePost($request->file('imagen'),$imagenName);
+                    $imagenStructure = new ImagePost($request->file('imagen'), $imagenName);
                     $imagenStructure->save();
                     $imagenName = $imagenStructure->getNameInfStorage();
 
@@ -328,23 +301,23 @@ class PostController extends Controller
                 $hashtags = [];
                 $fuentes = [];
 
-                if(!is_null($request->get('contenido'))){
+                if (!is_null($request->get('contenido'))) {
                     $informacionActualizar['contenido'] = $request->get('contenido');
                 }
 
-                if(!is_null($request->get('resumen'))){
+                if (!is_null($request->get('resumen'))) {
                     $informacionActualizar['resumen'] = $request->get('resumen');
                 }
 
-                if(!is_null($request->get('meta_keywords'))){
-                    $informacionActualizar['meta_keywords'] =  $request->get('meta_keywords');
+                if (!is_null($request->get('meta_keywords'))) {
+                    $informacionActualizar['meta_keywords'] = $request->get('meta_keywords');
                 }
 
-                if(!is_null($request->get('hashtags'))){
+                if (!is_null($request->get('hashtags'))) {
                     $hashtags = $request->get('hashtags');
                 }
 
-                if(!is_null($request->get('fuentes'))){
+                if (!is_null($request->get('fuentes'))) {
                     $fuentes = $request->get('fuentes');
                 }
 
@@ -364,15 +337,14 @@ class PostController extends Controller
         $post->hashtags()->sync($hashtagsIDs);
 
 
-
         $post->update($informacionActualizar);        //$post->save();
 
         //SI envian fuentes
-        if(count($fuentes) > 0 ){
+        if (count($fuentes) > 0) {
             $post->fuentes()->delete(); //Se eliminan todas las fuentes
 
             //Se crean las nuevas fuentes
-            foreach ($request->get('fuentes') as $fuente){
+            foreach ($request->get('fuentes') as $fuente) {
                 $post->fuentes()->create([
                     'autor' => $fuente['autor'],
                     'fecha_consulta' => $fuente['fecha_consulta'],
@@ -382,7 +354,6 @@ class PostController extends Controller
                 ]);
             }
         }
-
 
 
         return redirect()->back();

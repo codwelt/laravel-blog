@@ -87,11 +87,13 @@ Route::group(['prefix' => '/blog', 'as' => \Codwelt\Blog\BlogServiceProvider::NA
             Route::group(['prefix' => 'posts', 'as' => 'posts.'],function(){
 
                Route::get('/',[
-                   'uses' => 'Codwelt\Blog\Http\Controllers\User\PostJsonController@index'
+                   'uses' => 'Codwelt\Blog\Http\Controllers\User\PostJsonController@index',
+                   'as' => 'index'
                ]);
 
                 Route::get('/{slug}',[
-                    'uses' => 'Codwelt\Blog\Http\Controllers\User\PostJsonController@show'
+                    'uses' => 'Codwelt\Blog\Http\Controllers\User\PostJsonController@show',
+                    'as' => 'show'
                 ]);
 
                Route::get('/related/{postID}',[

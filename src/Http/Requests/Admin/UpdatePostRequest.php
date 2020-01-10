@@ -44,6 +44,10 @@ class UpdatePostRequest extends FormRequest
                 'string',
                 'regex:/^[a-z0-9]+(?:-[a-z0-9]+)*$/'
             ],
+            'resumen' => [
+                // 'regex:/'.StorePostRequest::REGEX_TITULO.'/',
+                'max:120'
+            ],
             'fuentes.*' => 'array',
             'fuentes.*.autor' => [
                 'required_with:fuentes',
@@ -68,6 +72,7 @@ class UpdatePostRequest extends FormRequest
             'hashtags' => ['array'],
             'hashtags.*' => ['required_with:hashtags','alpha_num'],
             'state' => [
+                'required',
                 'regex:/^('.StatePost::PUBLISHED.'||'.StatePost::DRAFT.')$/'
             ]
         ];
@@ -83,10 +88,6 @@ class UpdatePostRequest extends FormRequest
                     'contenido' => [
                         'string',
                         'required'
-                    ],
-                    'resumen' => [
-                       // 'regex:/'.StorePostRequest::REGEX_TITULO.'/',
-                        'max:400'
                     ],
                     'meta_keywords' => [
                         'required',

@@ -33,8 +33,12 @@ class PostsTestSon extends TestCaseSon
         $usuario = $this->createUser();
         $reponse = $this->actingAs($usuario)->post(route(BlogServiceProvider::NAMESPACE_PROYECT . '.admin.posts.store'), [
             'titulo' => "Test de POST",
-            'slug' => "test-de-post"
-        ])->assertRedirectedTo(route(BlogServiceProvider::NAMESPACE_PROYECT . '.admin.posts.'));
+            'slug' => "test-de-post",
+            "state" => StatePost::DRAFT
+        ]);
+
+
+        $reponse->assertRedirectedTo(route(BlogServiceProvider::NAMESPACE_PROYECT . '.admin.posts.'));
 
     }
 
@@ -80,7 +84,7 @@ class PostsTestSon extends TestCaseSon
             'hashtags' => [
                 'prueba'
             ],
-            'state' => StatePost::PUBLISHED,
+            'state' => StatePost::DRAFT,
             'resumen' => 'resument de prueba',
             'meta_keywords' => 'metaeprueba,,',
             'contenido' => 'contenido de prueba'
@@ -89,6 +93,7 @@ class PostsTestSon extends TestCaseSon
 
         $response = $this->call('POST',route(BlogServiceProvider::NAMESPACE_PROYECT . '.admin.posts.store'),$dataParameter,[],['imagen' => $imageUpload]);
         //Se hace el llamado a la ruta para crear post
+
 
 
         $response = $this->assertResponseStatus(302)->followRedirects($this);
@@ -101,8 +106,16 @@ class PostsTestSon extends TestCaseSon
 
         $response = $response->get(route(BlogServiceProvider::NAMESPACE_PROYECT . '.index'));
 
-
         $response->assertResponseStatus(200);
+
+        $this->assertStringContainsString($dataParameter["titulo"],$response->response->content());
+
+        $response = $response->get(route(BlogServiceProvider::NAMESPACE_PROYECT . '.api.user.posts.index', ['slug' => $dataParameter["slug"]]));
+
+        $this->assertStringContainsString($dataParameter["titulo"],$response->response->content());
+
+
+
 
     }
 
@@ -166,7 +179,7 @@ class PostsTestSon extends TestCaseSon
     public function getPostAPIJson()
     {
 
-        $response = $this->get(route(BlogServiceProvider::NAMESPACE_PROYECT . '.api.user.posts.', ['output' => 'ramdom']));
+        $response = $this->get(route(BlogServiceProvider::NAMESPACE_PROYECT . '.api.user.posts.index', ['output' => 'ramdom']));
         //dd($response);
         $response->assertResponseStatus(200);
     }

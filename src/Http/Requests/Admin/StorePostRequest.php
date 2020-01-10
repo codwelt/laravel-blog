@@ -48,7 +48,11 @@ class StorePostRequest extends FormRequest
                 'string',
                 'regex:/^[a-z0-9]+(?:-[a-z0-9]+)*$/'
             ],
-
+            'resumen' => [
+                'string',
+                //'regex:/'.self::REGEX_TITULO.'/',
+                'max:120'
+            ],
             'fuentes.*' => 'array',
             'fuentes.*.autor' => [
                 'required_with:fuentes',
@@ -73,8 +77,9 @@ class StorePostRequest extends FormRequest
             'hashtags' => ['array'],
             'hashtags.*' => ['alpha_num','required_with:hashtags','alpha_num'],
             'state' => [
+                'required',
                 'regex:/^('.StatePost::PUBLISHED.'||'.StatePost::DRAFT.')$/'
-            ]
+            ],
         ];
 
 
@@ -86,12 +91,6 @@ class StorePostRequest extends FormRequest
                         'string',
                         'required',
                         'unique:blog_posts,contenido'
-                    ],
-                    'resumen' => [
-                        'required',
-                        'string',
-                        //'regex:/'.self::REGEX_TITULO.'/',
-                        'max:400'
                     ],
                     'meta_keywords' => [
                         'required',
