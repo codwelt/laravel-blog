@@ -47,4 +47,12 @@ class User extends Authenticatable
     {
         return $this->name;
     }
+
+    /**
+     * @inheritDoc
+     */
+    public function getUrlImageProfile()
+    {
+        // TODO: Implement getUrlImageProfile() method.
+    }
 }

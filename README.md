@@ -103,7 +103,7 @@ El  key llamado `columnOfRelation` debe indicar la columna con la cual se relaci
 Para finalizar en su modelo creados de post debe usar el trait llamado `CommentatorOfPosts` que su ruta seria `CodWelt\Blog\Operations\Core\Traits\CommentatorOfPosts`. 
 Adicionalmente el trait tiene un metodo abstracto llamado `getNameModel` el cual debe implentar en el modelo y el cual debe retornar el nombre que se mostrara para 
 el creador del post, que para nuestro caso representa el mismo fillable `name` del modelo, adicioanlmente tambien se requiere implementar el metodo `getEmailModel` el cual debe devolver
-el correo electronico del usuario 
+el correo electronico del usuario y `getUrlImageProfile` que debe devolver la url de la imagen del perfil del usuario
 
 ```
    <?php
@@ -144,6 +144,15 @@ el correo electronico del usuario
        {
            return $this->email;
        }
+
+    /**
+     *  Debe retornar la url de la foto de perfil del usuario, si se retorna nulo se asigna una foto por defecto
+     * @return mixed
+     */
+    public function getUrlImageProfile(){
+        $this->url_profile;
+    }
+
    }
 
 ```

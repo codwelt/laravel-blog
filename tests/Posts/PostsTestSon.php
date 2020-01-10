@@ -84,7 +84,7 @@ class PostsTestSon extends TestCaseSon
             'hashtags' => [
                 'prueba'
             ],
-            'state' => StatePost::DRAFT,
+            'state' => StatePost::PUBLISHED,
             'resumen' => 'resument de prueba',
             'meta_keywords' => 'metaeprueba,,',
             'contenido' => 'contenido de prueba'

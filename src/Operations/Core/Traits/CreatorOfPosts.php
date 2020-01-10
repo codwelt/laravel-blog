@@ -25,4 +25,11 @@ trait CreatorOfPosts
      */
     public abstract function getNameModel();
 
+
+    /**
+     * Debe retornar la url de la foto de perfil del usuario, si se retorna nulo se asigna una foto por defecto
+     * @return mixed
+     */
+    public abstract function getUrlImageProfile();
+
 }
