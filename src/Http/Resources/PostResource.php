@@ -35,7 +35,7 @@ class PostResource extends JsonResource
                 'imgThumbnail' => $this->getUrlMiniImage(),
                 'imgHeader' => $this->getUrlHeaderImage()
             ],
-            'fecha_publicacion' => $this->created_at->diffForHumans(),
+            'fecha_publicacion' => $this->created_at->format("Y-m-d H:m:s"),
             'autor' => new CreatorResource($this->creador),
             'meta_keywords' => $this->meta_keywords,
             'url' => $this->getURL(),
