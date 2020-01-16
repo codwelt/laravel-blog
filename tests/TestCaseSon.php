@@ -6,6 +6,7 @@ use Codwelt\Blog\Tests\means\models\User;
 
 
 use Illuminate\Foundation\Testing\TestResponse;
+use Illuminate\Support\Facades\Artisan;
 use Intervention\Image\Facades\Image;
 use Intervention\Image\ImageServiceProvider;
 use Laravel\Scout\ScoutServiceProvider;
@@ -72,6 +73,8 @@ class TestCaseSon extends TestFather
             }
 
         });
+
+
 
     }
 

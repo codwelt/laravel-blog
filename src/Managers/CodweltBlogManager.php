@@ -20,7 +20,7 @@ class CodweltBlogManager
     public function getUrlPost($slug)
     {
         if(request()->wantsJson()){
-            return route(BlogServiceProvider::NAMESPACE_PROYECT . '.api.user.posts.show', ['slug' => $slug]);
+            return route('api.'.BlogServiceProvider::NAMESPACE_PROYECT . '.user.posts.show', ['slug' => $slug]);
         }
         return route(BlogServiceProvider::NAMESPACE_PROYECT.'.show',['slug' =>$slug]);
     }
@@ -38,6 +38,11 @@ class CodweltBlogManager
             return $front . '/'. $slug;
         }
         return route(BlogServiceProvider::NAMESPACE_PROYECT.'.show',['slug' =>$slug]);
+    }
+
+    public function getUrlRelatedPost($idEncripted)
+    {
+        return route('api.'.BlogServiceProvider::NAMESPACE_PROYECT.'.user.posts.related',['postID' =>$idEncripted]);
     }
 
     /**

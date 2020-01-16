@@ -39,6 +39,9 @@ class BlogServiceProvider extends ServiceProvider
 
 
         $this->loadRoutesFrom(__DIR__.'/Routes/web.php');
+        $this->loadRoutesFrom(__DIR__.'/Routes/api.php');
+
+
 
         $this->registerHelpers();
 

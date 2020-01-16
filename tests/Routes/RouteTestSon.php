@@ -7,6 +7,8 @@ use Codwelt\Blog\Operations\SEO\SitemapBlog;
 use Codwelt\Blog\Tests\TestCaseSon;
 use DOMDocument;
 use Illuminate\Http\UploadedFile;
+use Illuminate\Routing\Route;
+use Illuminate\Support\Facades\Artisan;
 use Laravelium\Sitemap\SitemapServiceProvider;
 
 
@@ -117,7 +119,9 @@ class RouteTestSon extends TestCaseSon
      */
     public function apiShowHashtags()
     {
-        $response = $this->get(route(BlogServiceProvider::NAMESPACE_PROYECT. '.api.user.hashtags.index'),["Accept" => "application/json"]);
+
+
+        $response = $this->get(route('api.'.BlogServiceProvider::NAMESPACE_PROYECT. '.user.hashtags.index'),["Accept" => "application/json"]);
 
         $response->assertResponseStatus(200);
     }

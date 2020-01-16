@@ -4,6 +4,7 @@
 namespace Codwelt\Blog\Models;
 
 use Codwelt\Blog\BlogServiceProvider;
+use Codwelt\Blog\Managers\CodweltBlogManager;
 use Codwelt\Blog\Operations\Constants\Path;
 use Codwelt\Blog\Operations\Models\StatePost;
 use Codwelt\Blog\Operations\Tools\UrlFormater;
@@ -167,14 +168,13 @@ class Post extends Model
 
     public function getEncryptedId()
     {
-
         return Hashids::encode($this->id);
     }
 
 
     public function getUrlRelated()
     {
-        return route(BlogServiceProvider::NAMESPACE_PROYECT.'.api.user.posts.related',['postID' => $this->getEncryptedId()]);
+        return (new CodweltBlogManager())->getUrlRelatedPost($this->getEncryptedId());
     }
 
 

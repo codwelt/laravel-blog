@@ -31,7 +31,9 @@ class CommentsJsonController extends Controller
         $post = Post::find($decodeID[0]);
 
         if(is_null($post)){
-            lara_exception("Post No existe")->style(BlogServiceProvider::NAMESPACE_PROYECT)->build();
+
+            return response()->json(["message" => 'Post No existe'],404);
+
         }
 
         if($request->has('commentatorID')){
@@ -61,12 +63,12 @@ class CommentsJsonController extends Controller
 
 
 
-        $post->comments()->create([
+        $comment = $post->comments()->create([
             'content' => $request->get('content'),
             'commentator_id' => $commentator->id
         ]);
 
-        return response()->json(['response'  => true]);
+        return new CommentResource($comment);
 
 
     }
@@ -76,9 +78,11 @@ class CommentsJsonController extends Controller
     public function search(Request $request)
     {
 
-        if($request->has('byPostID')){
+        if($request->has('byPostID') && !empty($request->get('byPostID'))){
+
 
             $decodeID = Hashids::decode($request->get('byPostID')) ?: [''];
+
 
 
             $ncomments = Config::paginationCommentsHome();
